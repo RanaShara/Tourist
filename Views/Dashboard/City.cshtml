@@ -1,0 +1,92 @@
+﻿@model IEnumerable<City>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="content">
+   
+        <h1>إدارة الباقات</h1>
+    
+   
+        <div class="modal" tabindex="-1" id="del">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">تأكيد الحذف</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>هل تريد حذف المدينة؟</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="confirm_deleteP()">حذف</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div container-flex justify-content-center align-items-center>
+    <div class="card mt-5 shadow">
+        <div class="card-header text-white">
+            <h4 class="text-center mb-0">إضافة مدينة جديدة</h4>
+        </div>
+        <div class="card-body">
+                <form asp-action="CreateNewCity" method="post">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">المدينة</label>
+                        <input type="text" name="Name" class="form-control" placeholder="أدخل اسم المدينة" />
+                    </div>
+                    
+                <div class="row mt-4">
+                    <div class="col text-center">
+                        <button class="btn ">حفظ</button>
+                    </div>
+                </div>
+               </div>
+            </form>
+        </div>
+    </div>
+ 
+
+    <!-- قائمة الباقات -->
+    <div class="card mt-5 shadow">
+        <div class="card-header text-white">
+            <h4 class="text-center mb-0">قائمة المدن</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>رقم المدينة</th>
+                        <th>اسم المدينة</th>
+                       
+                        <th colspan="2">الإجراء</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var items in Model)
+                    {
+                        <tr>
+                            <td>@items.Id</td>
+                            <td>@items.Name</td>
+                           
+                            <td>
+                                <a onclick="showmessage(@items.Id)" class="text-danger" role="button" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف الباقة">
+                                    <i class="bi bi-trash-fill fs-5"></i>
+                                </a>
+                            </td>
+                            <td>
+                                    <a asp-action="EditCity" asp-route-id="@items.Id" class="text-success" role="button" data-bs-toggle="tooltip" data-bs-placement="top" title="تعديل الباقة">
+                                    <i class="bi bi-pencil-square fs-5"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+  </div>
+</div>
+

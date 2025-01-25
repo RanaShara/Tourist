@@ -1,0 +1,78 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success text-center">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger text-center">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<h1> مرحبا بكم في العالم السعودي</h1>
+
+<div class="container my-5">
+    <div class="animated-header">
+        <h1>
+            <span>استمتع</span>
+            <span>بأفضل</span>
+            <span>الباقات</span>
+            <span>السياحية</span>
+        </h1>
+    </div>
+
+    <div class="filter-bar">
+       
+        <select id="cityFilter" class="filter-select">
+            <option value="all">جميع المدن</option>
+            @foreach (var city in ViewBag.Cities)
+            {
+                <option value="@city.Name">@city.Name</option>
+            }
+        </select>
+    </div>
+
+    <!-- عرض الباقات -->
+    <div class="row g-4" id="packageContainer">
+        @foreach (var package in ViewBag.GetPackage)
+        {
+            <div class="col-md-4 package-card" data-city="@package.CityName">
+                <div class="card">
+                    <img src="/Images/@package.ImagePath" class="card-img-top" alt="صورة الباقة">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">@package.Name</h5>
+                        <p class="card-text">@package.Description</p>
+                        <p class="text-muted">المدينة: @package.CityName</p>
+                        <p class="fw-bold">السعر: @package.Price ريال</p>
+                        <a asp-action="Details" asp-route-id="@package.Id" class="btn btn-primary">عرض التفاصيل</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<script>
+    document.getElementById('cityFilter').addEventListener('change', function () {
+        const selectedCity = this.value;
+        const packages = document.querySelectorAll('.package-card');
+
+        packages.forEach(card => {
+            const cardCity = card.getAttribute('data-city');
+
+            if (selectedCity === 'all' || cardCity === selectedCity) {
+                card.style.display = 'block'; 
+            } else {
+                card.style.display = 'none'; 
+            }
+        });
+    });
+</script>

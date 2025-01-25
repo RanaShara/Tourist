@@ -1,0 +1,56 @@
+﻿@model Package
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var getData = ViewBag.getData;
+   
+}
+
+<div container-flex justify-content-center align-items-center>
+    <div class="card mt-5 shadow">
+        <div class="card-header text-white">
+            <h4 class="text-center mb-0">تعديل الباقة </h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="UpdatePackage" method="post" enctype="multipart/form-data">
+                <div class="row g-3">
+                    <input type="hidden" asp-for="@Model.Id" />
+                    <div class="col-md-6">
+                        <label class="form-label">اسم الباقة</label>
+                        <input type="text" asp-for="@Model.Name" class="form-control" /> 
+                    <div class="col-md-6">
+                        <label class="form-label">وصف الباقة</label>
+                            <input type="text" asp-for="@Model.Description" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">سعر الباقة</label>
+                            <input type="number" asp-for="@Model.Price" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">المدينة</label>
+                        <select class="form-select" name="CityId">
+                            <option>اختر المدينة</option>
+                            @foreach (var item in getData)
+                            {
+                                <option value=@item.Id>@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">التفاصيل</label>
+                            <input type="text" asp-for="@Model.Details" class="form-control" />
+                    </div>
+                        <div class="col-md-6">
+                            <label class="form-label">الصوره</label>
+                            <input type="file" name="Photo" class="form-control" />
+                        </div>
+                </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col text-center">
+                        <button class="btn ">حفظ</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

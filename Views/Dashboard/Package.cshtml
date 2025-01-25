@@ -1,0 +1,127 @@
+﻿@model Package
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var getData = ViewBag.getData;
+    var GetPackage = ViewBag.GetPackage;
+}
+
+<div class="content">
+   
+        <h1>إدارة الباقات</h1>
+    
+   
+        <div class="modal" tabindex="-1" id="del">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">تأكيد الحذف</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>هل تريد حذف الباقة؟</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="confirm_delete()">حذف</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div container-flex justify-content-center align-items-center>
+    <div class="card mt-5 shadow">
+        <div class="card-header text-white">
+            <h4 class="text-center mb-0">إضافة باقة جديدة</h4>
+        </div>
+        <div class="card-body">
+                <form asp-action="CreateNewPackage" method="post" enctype="multipart/form-data">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">اسم الباقة</label>
+                        <input type="text" name="Name" class="form-control" placeholder="أدخل اسم الباقة" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">وصف الباقة</label>
+                        <input type="text" name="Description" class="form-control" placeholder="أدخل وصف الباقة" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">سعر الباقة</label>
+                        <input type="number" name="Price" class="form-control" placeholder="أدخل سعر الباقة" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">المدينة</label>
+                            <select class="form-select" name="CityId">
+                            <option>اختر المدينة</option>
+                            @foreach (var item in getData)
+                            {
+                                <option value=@item.Id>@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">التفاصيل</label>
+                        <input type="text" name="Details" class="form-control" placeholder="أدخل تفاصيل الباقة" />
+                    </div>
+                        <div class="col-md-6">
+                            <label class="form-label">الصوره</label>
+                            <input type="file" name="Photo" class="form-control"  />
+                        </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col text-center">
+                        <button class="btn ">حفظ</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mt-5 shadow">
+        <div class="card-header text-white">
+            <h4 class="text-center mb-0">قائمة الباقات</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>رقم الباقة</th>
+                        <th>اسم الباقة</th>
+                        <th>وصف الباقة</th>
+                        <th>سعر الباقة</th>
+                        <th>المدينة</th>
+                        <th>تفاصيل الباقة</th>
+                        <th>الصورة</th>
+                        <th colspan="2">الإجراء</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var items in GetPackage)
+                    {
+                        <tr>
+                            <td>@items.Id</td>
+                            <td>@items.Name</td>
+                            <td>@items.Description</td>
+                            <td>@items.Price</td>
+                            <td>@items.CityName</td>
+                            <td>@items.Details</td>
+                                <td>
+                                    <img src="/Images/@items.ImagePath" width="60" height="60" class="rounded rounded-circle" />
+                                </td>
+                            <td>
+                                <a onclick="showmessage(@items.Id)" class="text-danger" role="button" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف الباقة">
+                                    <i class="bi bi-trash-fill fs-5"></i>
+                                </a>
+                            </td>
+                            <td>
+                                    <a asp-action="EditPackage" asp-route-id="@items.Id" class="text-success" role="button" data-bs-toggle="tooltip" data-bs-placement="top" title="تعديل الباقة">
+                                    <i class="bi bi-pencil-square fs-5"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,34 @@
+﻿@model City
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="content">
+    <div container-flex justify-content-center align-items-center>
+        <div class="card mt-5 shadow">
+            <div class="card-header text-white">
+                <h4 class="text-center mb-0">تعديل المدينة </h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="UpdateCity" method="post">
+                    <div class="row g-3">
+                        <input type="hidden" asp-for="@Model.Id" />
+                        <div class="col-md-6">
+                            <label class="form-label">المدينة</label>
+                            <input type="text" asp-for="@Model.Name" class="form-control" />
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col text-center">
+                                <button class="btn ">حفظ</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>

@@ -1,0 +1,56 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="row" style="direction: rtl; text-align: right;">
+    <div class="col-md-4">
+        <section style="background-color: #f8f9fa; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <form id="account" method="post">
+                <h2 style="color: #6b42c1;">تسجيل الدخول</h2>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" style="border: 1px solid #6b42c1;" />
+                    <label asp-for="Input.Email" class="form-label" style="color: #6b42c1;">البريد الإلكتروني</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" style="border: 1px solid #6b42c1;" />
+                    <label asp-for="Input.Password" class="form-label" style="color: #6b42c1;">كلمة المرور</label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="checkbox mb-3">
+                    <label asp-for="Input.RememberMe" class="form-label">
+                        <input class="form-check-input" asp-for="Input.RememberMe" />
+                        @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        <span style="color: #6b42c1;">تذكرني</span>
+                    </label>
+                </div>
+                <div>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary" style="background-color: #6b42c1; border: none;">تسجيل الدخول</button>
+                </div>
+                <div>
+                    <p>
+                        <a id="forgot-password" asp-page="./ForgotPassword" style="color: #6b42c1; text-decoration: none;">هل نسيت كلمة المرور؟</a>
+                    </p>
+                    <p>
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" style="color: #6b42c1; text-decoration: none;">تسجيل مستخدم جديد</a>
+                    </p>
+                    <p>
+                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" style="color: #6b42c1; text-decoration: none;">إعادة إرسال تأكيد البريد الإلكتروني</a>
+                    </p>
+                </div>
+            </form>
+        </section>
+    </div>
+
+</div>
+    
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

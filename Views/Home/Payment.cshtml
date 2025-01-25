@@ -1,0 +1,66 @@
+﻿@model dynamic
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-lg border-0 text-center">
+                <div class="card-body">
+                    <h3 class="card-title text-mauve fw-bold mb-3">تفاصيل الحجز</h3>
+                    <p class="card-text">
+                        <span class="text-muted">اسم الباقة: </span> <span class="fw-bold">@ViewBag.Package.Name</span>
+                    </p>
+                    <p class="card-text">
+                        <span class="text-muted">المدينة: </span> <span class="fw-bold">@ViewBag.Package.CityName</span>
+                    </p>
+                    <p class="card-text text-mauve fw-bold">
+                        <span class="text-muted">السعر: </span> @ViewBag.Package.Price ريال
+                    </p>
+
+                    <form method="post" action="/Home/ConfirmPayment">
+                        <input type="hidden" name="packageId" value="@ViewBag.Package.Id" />
+                        <div class="mb-3">
+                            <label for="cardNumber" class="form-label">رقم البطاقة:</label>
+                            <input type="text" id="cardNumber" name="cardNumber" class="form-control" placeholder="أدخل رقم البطاقة" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="expiryDate" class="form-label">تاريخ الانتهاء:</label>
+                            <input type="text" id="expiryDate" name="expiryDate" class="form-control" placeholder="MM/YY" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cvv" class="form-label">CVV:</label>
+                            <input type="text" id="cvv" name="cvv" class="form-control" placeholder="XXX" required>
+                        </div>
+                        <button type="submit" class="btn btn-mauve mt-3">إتمام الدفع</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .text-mauve {
+        color: #6a1b9a;
+    }
+
+    .btn-mauve {
+        background-color: #6a1b9a;
+        color: #fff;
+        border: none;
+    }
+
+        .btn-mauve:hover {
+            background-color: #4caf50;
+            color: #fff;
+        }
+
+    .card {
+        border-radius: 15px;
+        padding: 2rem;
+    }
+</style>

@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>لوحة التحكم</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Almarai" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link href="/css/site.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar-nav" style="width: 220px; float: right;">
+        <h2>لوحة التحكم</h2>
+        <a class="nav-link" href="/dashboard/">لوحة البيانات</a>
+        <a class="nav-link" href="/dashboard/Package">الباقات سياحية</a>
+        <a class="nav-link" href="/dashboard/City">المدن</a>
+        <a class="nav-link" href="/Home/">العودة الى صفحة المستخدم</a>
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Logout">تسجيل الخروج</a>
+
+	</div>
+	
+    <!-- Main Content -->
+    <div class="content" style="margin-right: 220px;">
+        <header class="navbar navbar-dark bg-dark">
+            <div class="container-fluid">
+                <span class="navbar-brand">لوحة التحكم</span>
+            </div>
+        </header>
+        <main class="container mt-4">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Scripts Section -->
+   @RenderSection("Scripts", required: false)
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="/js/ex.js"></script>
+    <footer id="footer">
+        <div class="footer-content">
+            © RanaShara 2025 | All Rights Reserved
+        </div>
+        <div class="footer-links">
+            <a href="https://www.example.com/privacy-policy">Privacy Policy</a> |
+            <a href="https://www.example.com/terms">Terms & Conditions</a>
+        </div>
+    </footer>
+
+    <script>
+        window.onscroll = function() {showFooter()};
+
+        function showFooter() {
+            var footer = document.getElementById("footer");
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                footer.classList.add("visible");
+            } else {
+                footer.classList.remove("visible");
+            }
+        }
+    </script>
+
+
+
+</body>
+
+
+</html>
