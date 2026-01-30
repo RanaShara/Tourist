@@ -44,12 +44,3 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-using (var scope = app.Services.CreateScope())
-{
-    var db1 = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db1.Database.Migrate();
-
-    var db2 = scope.ServiceProvider.GetRequiredService<DashboardContext>();
-    db2.Database.Migrate();
-}
-app.Run();
