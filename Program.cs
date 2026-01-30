@@ -7,10 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<ApplicationDbContext>(option =>
-{
-    option.UseSqlServer(builder.Configuration.GetConnectionString("DefualtConnection"));
-}
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
 );
 builder.Services.AddDbContext<DashboardContext>(options =>
     options.UseNpgsql(
@@ -46,12 +46,10 @@ app.MapControllerRoute(
     .WithStaticAssets();
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.Migrate();
-}
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<DashboardContext>();
-    db.Database.Migrate();
+    var db1 = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db1.Database.Migrate();
+
+    var db2 = scope.ServiceProvider.GetRequiredService<DashboardContext>();
+    db2.Database.Migrate();
 }
 app.Run();
