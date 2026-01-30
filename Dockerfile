@@ -24,7 +24,7 @@ COPY --from=build /app/out .
 
 # إعداد متغير البيئة الافتراضي للـ ConnectionString
 # لاحقًا على Render سنضع Environment Variable حقيقي
-#ENV ConnectionStrings__DefaultConnection=""
+# ENV ConnectionStrings__DefaultConnection=""
 
 # أمر تشغيل المشروع
 ENTRYPOINT ["dotnet", "TouristP.dll"]
