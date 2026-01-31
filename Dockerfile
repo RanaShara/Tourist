@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 COPY . ./
 RUN dotnet restore
-RUN dotnet publish -c Release -o out
+RUN dotnet publish TouristP.csproj -c Release -o out
 
 # مرحلة التشغيل
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
