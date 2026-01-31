@@ -1,8 +1,15 @@
 # مرحلة البناء
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
+
+# انسخ ملفات المشروع فقط أولاً لتسريع restore
+COPY TouristP.csproj ./
+RUN dotnet restore TouristP.csproj
+
+# انسخ باقي الملفات
 COPY . ./
-RUN dotnet restore
+
+# بناء المشروع
 RUN dotnet publish TouristP.csproj -c Release -o out
 
 # مرحلة التشغيل
