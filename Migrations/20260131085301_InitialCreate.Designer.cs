@@ -11,8 +11,8 @@ using TouristP.Data;
 namespace TouristP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260130115442_InitialPostgres")]
-    partial class InitialPostgres
+    [Migration("20260131085301_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

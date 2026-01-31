@@ -9,7 +9,7 @@ namespace TouristP.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+       
         private readonly ApplicationDbContext _context;
 
         public HomeController(ApplicationDbContext context)
@@ -21,7 +21,7 @@ namespace TouristP.Controllers
 
         public IActionResult Index()
         {
-            // ÌáÈ ÌãíÚ ÇáÈÇŞÇÊ
+            // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             var GetPackage = _context.Package.Join(
                 _context.City,
                 Package => Package.CityId,
@@ -37,10 +37,10 @@ namespace TouristP.Controllers
                     CityName = City.Name
                 }).ToList();
 
-            // ÌáÈ ÃÓãÇÁ ÇáãÏä
+            // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
             var Cities = _context.City.Select(c => new { c.Id, c.Name }).ToList();
 
-            // ÊãÑíÑ ÇáÈíÇäÇÊ Åáì ÇáÜ View
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ View
             ViewBag.GetPackage = GetPackage;
             ViewBag.Cities = Cities;
 
@@ -104,12 +104,12 @@ namespace TouristP.Controllers
 
             if (package == null)
             {
-                TempData["ErrorMessage"] = "ÍÏË ÎØÃ ÃËäÇÁ ãÚÇáÌÉ ÇáÏİÚ. ÇáÈÇŞÉ ÛíÑ ãæÌæÏÉ.";
+                TempData["ErrorMessage"] = "ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.";
                 return RedirectToAction("Index");
             }
 
             
-            TempData["SuccessMessage"] = $"Êã ÇáÏİÚ ÈäÌÇÍ ááÈÇŞÉ: {package.Name}. ÇáÓÚÑ: {package.Price} ÑíÇá.";
+            TempData["SuccessMessage"] = $"ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {package.Name}. ï¿½ï¿½ï¿½ï¿½ï¿½: {package.Price} ï¿½ï¿½ï¿½ï¿½.";
             return RedirectToAction("Index"); 
         }
 
