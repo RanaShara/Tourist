@@ -1,3 +1,5 @@
+namespace TouristP.Services
+{
 public class CloudinaryService
 {
     private readonly Cloudinary _cloudinary;
@@ -36,4 +38,5 @@ public class CloudinaryService
         var result = _cloudinary.Upload(uploadParams);
         return result.SecureUrl?.ToString();
     }
+}
 }
