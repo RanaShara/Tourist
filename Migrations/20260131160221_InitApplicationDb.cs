@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TouristP.Migrations
 {
     /// <inheritdoc />
-    public partial class Create : Migration
+    public partial class InitApplicationDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
