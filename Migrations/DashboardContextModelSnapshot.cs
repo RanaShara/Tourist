@@ -7,7 +7,7 @@ using TouristP.Data;
 
 #nullable disable
 
-namespace TouristP.Migrations.Dashboard
+namespace TouristP.Migrations
 {
     [DbContext(typeof(DashboardContext))]
     partial class DashboardContextModelSnapshot : ModelSnapshot

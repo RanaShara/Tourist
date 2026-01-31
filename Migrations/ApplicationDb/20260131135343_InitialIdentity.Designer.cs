@@ -8,11 +8,11 @@ using TouristP.Data;
 
 #nullable disable
 
-namespace TouristP.Migrations
+namespace TouristP.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260131103839_InitialApp")]
-    partial class InitialApp
+    [Migration("20260131135343_InitialIdentity")]
+    partial class InitialIdentity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

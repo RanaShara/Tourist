@@ -8,10 +8,10 @@ using TouristP.Data;
 
 #nullable disable
 
-namespace TouristP.Migrations.Dashboard
+namespace TouristP.Migrations
 {
     [DbContext(typeof(DashboardContext))]
-    [Migration("20260131103924_InitialDashboard")]
+    [Migration("20260131135325_InitialDashboard")]
     partial class InitialDashboard
     {
         /// <inheritdoc />

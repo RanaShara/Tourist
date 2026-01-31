@@ -39,4 +39,22 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        var dashboardDb = services.GetRequiredService<DashboardContext>();
+        dashboardDb.Database.Migrate();
+
+        var identityDb = services.GetRequiredService<ApplicationDbContext>();
+        identityDb.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+}
+
 app.Run();
