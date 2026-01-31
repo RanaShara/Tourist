@@ -1,10 +1,7 @@
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
- 
 namespace TouristP.Services
 {
+    
+
 public class CloudinaryService
 {
     private readonly Cloudinary _cloudinary;
