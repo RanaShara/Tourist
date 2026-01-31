@@ -17,6 +17,10 @@ namespace TouristP.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
        
+       public IActionResult Index()
+{
+    return View();
+}
 
         public IActionResult Package()
         {
