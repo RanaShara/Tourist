@@ -11,9 +11,10 @@ namespace TouristP.Controllers
         private readonly DashboardContext _context;
         private readonly CloudinaryService _cloudinaryService;
 
-        public DashboardController(
-            DashboardContext context,
-            CloudinaryService cloudinaryService)
+        // رابط الصورة الافتراضية عند عدم رفع صورة
+        private const string DefaultImage = "https://res.cloudinary.com/demo/image/upload/v123456/default.png";
+
+        public DashboardController(DashboardContext context, CloudinaryService cloudinaryService)
         {
             _context = context;
             _cloudinaryService = cloudinaryService;
@@ -27,39 +28,43 @@ namespace TouristP.Controllers
 
         // ================= Packages =================
         public IActionResult Package()
-{
-    var cities = _context.City.ToList();
-    ViewBag.getData = cities;
+        {
+            var cities = _context.City.ToList();
+            ViewBag.getData = cities;
 
-    var packages = _context.Package
-        .Join(
-            _context.City,
-            p => p.CityId,
-            c => c.Id,
-            (p, c) => new
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Description = p.Description,
-                Price = p.Price,
-                Details = p.Details,
-                ImagePath = p.ImagePath,
-                CityName = c.Name
-            }
-        ).ToList();
+            var packages = _context.Package
+                .Join(
+                    _context.City,
+                    p => p.CityId,
+                    c => c.Id,
+                    (p, c) => new
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                        Price = p.Price,
+                        Details = p.Details,
+                        ImagePath = p.ImagePath,
+                        CityName = c.Name
+                    }
+                ).ToList();
 
-    ViewBag.GetPackage = packages;
-    return View();
-}
-
+            ViewBag.GetPackage = packages;
+            return View();
+        }
 
         [HttpPost]
-        [IgnoreAntiforgeryToken]
+        [IgnoreAntiforgeryToken] // يمكنك إزالة هذا إذا أردت CSRF protection
         public IActionResult CreateNewPackage(Package package, IFormFile Photo)
         {
             if (Photo != null && Photo.Length > 0)
             {
                 package.ImagePath = _cloudinaryService.UploadImage(Photo);
+            }
+            else
+            {
+                // تعيين صورة افتراضية إذا لم يتم رفع صورة
+                package.ImagePath = DefaultImage;
             }
 
             _context.Package.Add(package);
@@ -102,6 +107,7 @@ namespace TouristP.Controllers
             {
                 existingPackage.ImagePath = _cloudinaryService.UploadImage(Photo);
             }
+            // إذا لم يتم رفع صورة جديدة، احتفظ بالصورة الحالية
 
             _context.SaveChanges();
             return RedirectToAction("Package");
