@@ -2,83 +2,69 @@
 using Microsoft.EntityFrameworkCore;
 using TouristP.Data;
 using TouristP.Models;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
-using Microsoft.Extensions.Configuration;
+using TouristP.Services;
 
 namespace TouristP.Controllers
 {
     public class DashboardController : Controller
     {
         private readonly DashboardContext _context;
-        private readonly Cloudinary _cloudinary;
+        private readonly CloudinaryService _cloudinaryService;
 
-        public DashboardController(DashboardContext context, IConfiguration config)
+        public DashboardController(
+            DashboardContext context,
+            CloudinaryService cloudinaryService)
         {
             _context = context;
-
-            // إعداد Cloudinary باستخدام Environment Variables
-            var cloudName = config["Cloudinary:CloudName"];
-            var apiKey = config["Cloudinary:ApiKey"];
-            var apiSecret = config["Cloudinary:ApiSecret"];
-            var account = new Account(cloudName, apiKey, apiSecret);
-            _cloudinary = new Cloudinary(account);
+            _cloudinaryService = cloudinaryService;
         }
 
+        // ================= Dashboard =================
         public IActionResult Index()
         {
             return View();
         }
 
+        // ================= Packages =================
         public IActionResult Package()
         {
-            var getData = _context.City.ToList();
-            ViewBag.getData = getData;
+            ViewBag.getData = _context.City.ToList();
 
-            var GetPackage = _context.Package.Join(
-                _context.City,
-                p => p.CityId,
-                c => c.Id,
-                (p, c) => new
+            var packages = _context.Package
+                .Include(p => p.City)
+                .Select(p => new
                 {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Price = p.Price,
-                    Details = p.Details,
-                    ImagePath = p.ImagePath,
-                    CityName = c.Name
-                }).ToList();
+                    p.Id,
+                    p.Name,
+                    p.Description,
+                    p.Price,
+                    p.Details,
+                    p.ImagePath,
+                    CityName = p.City.Name
+                })
+                .ToList();
 
-            ViewBag.GetPackage = GetPackage;
+            ViewBag.GetPackage = packages;
             return View();
         }
 
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
         public IActionResult CreateNewPackage(Package package, IFormFile Photo)
         {
             if (Photo != null && Photo.Length > 0)
             {
-                // رفع الصورة إلى Cloudinary
-                using var stream = Photo.OpenReadStream();
-                var uploadParams = new ImageUploadParams()
-                {
-                    File = new FileDescription(Photo.FileName, stream)
-                };
-                var result = _cloudinary.Upload(uploadParams);
-
-                // حفظ رابط الصورة في قاعدة البيانات
-                package.ImagePath = result.SecureUrl.ToString();
+                package.ImagePath = _cloudinaryService.UploadImage(Photo);
             }
 
-            _context.Add(package);
+            _context.Package.Add(package);
             _context.SaveChanges();
-
             return RedirectToAction("Package");
         }
 
         public IActionResult DeletePackage(int id)
         {
-            var package = _context.Package.SingleOrDefault(c => c.Id == id);
+            var package = _context.Package.SingleOrDefault(p => p.Id == id);
             if (package != null)
             {
                 _context.Package.Remove(package);
@@ -89,51 +75,44 @@ namespace TouristP.Controllers
 
         public IActionResult EditPackage(int id)
         {
-            var getData = _context.City.ToList();
-            ViewBag.getData = getData;
-
-            var edit_Package = _context.Package.SingleOrDefault(e => e.Id == id);
-            return View(edit_Package);
+            ViewBag.getData = _context.City.ToList();
+            var package = _context.Package.SingleOrDefault(p => p.Id == id);
+            return View(package);
         }
 
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
         public IActionResult UpdatePackage(Package package, IFormFile Photo)
         {
             var existingPackage = _context.Package.SingleOrDefault(p => p.Id == package.Id);
-            if (existingPackage == null) return NotFound("الباقة غير موجودة");
+            if (existingPackage == null) return NotFound();
 
             existingPackage.Name = package.Name;
             existingPackage.Description = package.Description;
             existingPackage.Price = package.Price;
+            existingPackage.Details = package.Details;
             existingPackage.CityId = package.CityId;
 
             if (Photo != null && Photo.Length > 0)
             {
-                // رفع الصورة الجديدة إلى Cloudinary
-                using var stream = Photo.OpenReadStream();
-                var uploadParams = new ImageUploadParams()
-                {
-                    File = new FileDescription(Photo.FileName, stream)
-                };
-                var result = _cloudinary.Upload(uploadParams);
-                existingPackage.ImagePath = result.SecureUrl.ToString();
+                existingPackage.ImagePath = _cloudinaryService.UploadImage(Photo);
             }
 
-            _context.Package.Update(existingPackage);
             _context.SaveChanges();
-
             return RedirectToAction("Package");
         }
 
-        // === City Methods ===
+        // ================= Cities =================
         public IActionResult City()
         {
-            var getData = _context.City.ToList();
-            return View(getData);
+            return View(_context.City.ToList());
         }
 
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
         public IActionResult CreateNewCity(City city)
         {
-            _context.Add(city);
+            _context.City.Add(city);
             _context.SaveChanges();
             return RedirectToAction("City");
         }
@@ -151,10 +130,12 @@ namespace TouristP.Controllers
 
         public IActionResult EditCity(int id)
         {
-            var edit_City = _context.City.SingleOrDefault(e => e.Id == id);
-            return View(edit_City);
+            var city = _context.City.SingleOrDefault(c => c.Id == id);
+            return View(city);
         }
 
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
         public IActionResult UpdateCity(City city)
         {
             _context.City.Update(city);

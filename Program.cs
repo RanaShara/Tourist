@@ -21,6 +21,7 @@ builder.Services.AddDbContext<DashboardContext>(options =>
     )
 );
 builder.Services.AddSingleton<CloudinaryService>();
+
 var app = builder.Build();
 
 app.UseForwardedHeaders();
