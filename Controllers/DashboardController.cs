@@ -9,7 +9,7 @@ namespace TouristP.Controllers
     public class DashboardController : Controller
     {
         private readonly ApplicationDbContext _context;
-         public DashboardController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+         public DashboardController(ApplicationDbContext context)
         {
             _context = context;
 
