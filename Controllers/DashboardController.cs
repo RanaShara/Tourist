@@ -27,26 +27,31 @@ namespace TouristP.Controllers
 
         // ================= Packages =================
         public IActionResult Package()
-        {
-            ViewBag.getData = _context.City.ToList();
+{
+    var cities = _context.City.ToList();
+    ViewBag.getData = cities;
 
-            var packages = _context.Package
-                .Include(p => p.City)
-                .Select(p => new
-                {
-                    p.Id,
-                    p.Name,
-                    p.Description,
-                    p.Price,
-                    p.Details,
-                    p.ImagePath,
-                    CityName = p.City.Name
-                })
-                .ToList();
+    var packages = _context.Package
+        .Join(
+            _context.City,
+            p => p.CityId,
+            c => c.Id,
+            (p, c) => new
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                Details = p.Details,
+                ImagePath = p.ImagePath,
+                CityName = c.Name
+            }
+        ).ToList();
 
-            ViewBag.GetPackage = packages;
-            return View();
-        }
+    ViewBag.GetPackage = packages;
+    return View();
+}
+
 
         [HttpPost]
         [IgnoreAntiforgeryToken]
