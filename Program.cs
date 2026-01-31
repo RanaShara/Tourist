@@ -20,7 +20,7 @@ builder.Services.AddDbContext<DashboardContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
 );
-builder.Services.AddSingleton<CloudinaryService>();
+builder.Services.AddScoped<CloudinaryService>();
 
 var app = builder.Build();
 

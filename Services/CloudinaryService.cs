@@ -1,33 +1,39 @@
-namespace TouristP.Services
+public class CloudinaryService
 {
-    using CloudinaryDotNet;
-    using CloudinaryDotNet.Actions;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.Extensions.Configuration;
+    private readonly Cloudinary _cloudinary;
 
-    public class CloudinaryService
+    public CloudinaryService(IConfiguration configuration)
     {
-        private readonly Cloudinary _cloudinary;
+        var cloudName = configuration["Cloudinary:CloudName"];
+        var apiKey = configuration["Cloudinary:ApiKey"];
+        var apiSecret = configuration["Cloudinary:ApiSecret"];
 
-        public CloudinaryService(IConfiguration configuration)
+        if (string.IsNullOrWhiteSpace(cloudName) ||
+            string.IsNullOrWhiteSpace(apiKey) ||
+            string.IsNullOrWhiteSpace(apiSecret))
         {
-            var acc = new Account(
-                configuration["Cloudinary:CloudName"],
-                configuration["Cloudinary:ApiKey"],
-                configuration["Cloudinary:ApiSecret"]
-            );
-            _cloudinary = new Cloudinary(acc);
+            throw new Exception("Cloudinary environment variables are missing");
         }
 
-        public string UploadImage(IFormFile file)
+        _cloudinary = new Cloudinary(new Account(
+            cloudName,
+            apiKey,
+            apiSecret
+        ));
+    }
+
+    public string UploadImage(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return null;
+
+        using var stream = file.OpenReadStream();
+        var uploadParams = new ImageUploadParams
         {
-            using var stream = file.OpenReadStream();
-            var uploadParams = new ImageUploadParams()
-            {
-                File = new FileDescription(file.FileName, stream)
-            };
-            var result = _cloudinary.Upload(uploadParams);
-            return result.SecureUrl.ToString();
-        }
+            File = new FileDescription(file.FileName, stream)
+        };
+
+        var result = _cloudinary.Upload(uploadParams);
+        return result.SecureUrl?.ToString();
     }
 }
