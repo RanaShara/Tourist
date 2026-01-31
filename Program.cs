@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using TouristP.Data;
+using TouristP.Models;
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +14,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
 );
-
+builder.Services.AddDbContext<DashboardContext>(options =>
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
+);
 var app = builder.Build();
 
 app.UseForwardedHeaders();

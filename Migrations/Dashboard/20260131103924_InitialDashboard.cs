@@ -3,10 +3,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace TouristP.Migrations
+namespace TouristP.Migrations.Dashboard
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialDashboard : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
