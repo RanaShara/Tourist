@@ -53,24 +53,44 @@ namespace TouristP.Controllers
             return View();
         }
 
-        [HttpPost]
-        [IgnoreAntiforgeryToken] // يمكنك إزالة هذا إذا أردت CSRF protection
-        public IActionResult CreateNewPackage(Package package, IFormFile Photo)
-        {
-            if (Photo != null && Photo.Length > 0)
-            {
-                package.ImagePath = _cloudinaryService.UploadImage(Photo);
-            }
-            else
-            {
-                // تعيين صورة افتراضية إذا لم يتم رفع صورة
-                package.ImagePath = DefaultImage;
-            }
+[HttpPost]
+[IgnoreAntiforgeryToken]
+public IActionResult CreateNewPackage(Package package, IFormFile Photo)
+{
+    if (Photo != null && Photo.Length > 0)
+    {
+        // اسم فريد للصورة
+        var fileName = Guid.NewGuid() + Path.GetExtension(Photo.FileName);
 
-            _context.Package.Add(package);
-            _context.SaveChanges();
-            return RedirectToAction("Package");
+        // المسار داخل wwwroot/uploads
+        var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+
+        // لو المجلد مو موجود
+        if (!Directory.Exists(uploadsPath))
+        {
+            Directory.CreateDirectory(uploadsPath);
         }
+
+        var filePath = Path.Combine(uploadsPath, fileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            Photo.CopyTo(stream);
+        }
+
+        // المسار اللي ينحفظ بالـ DB
+        package.ImagePath = "/uploads/" + fileName;
+    }
+    else
+    {
+        package.ImagePath = "/uploads/default.png"; // اختياري
+    }
+
+    _context.Package.Add(package);
+    _context.SaveChanges();
+    return RedirectToAction("Package");
+}
+
 
         public IActionResult DeletePackage(int id)
         {
@@ -92,26 +112,41 @@ namespace TouristP.Controllers
 
         [HttpPost]
         [IgnoreAntiforgeryToken]
-        public IActionResult UpdatePackage(Package package, IFormFile Photo)
+        [HttpPost]
+[IgnoreAntiforgeryToken]
+public IActionResult UpdatePackage(Package package, IFormFile Photo)
+{
+    var existingPackage = _context.Package.FirstOrDefault(p => p.Id == package.Id);
+    if (existingPackage == null) return NotFound();
+
+    existingPackage.Name = package.Name;
+    existingPackage.Description = package.Description;
+    existingPackage.Price = package.Price;
+    existingPackage.Details = package.Details;
+    existingPackage.CityId = package.CityId;
+
+    if (Photo != null && Photo.Length > 0)
+    {
+        var fileName = Guid.NewGuid() + Path.GetExtension(Photo.FileName);
+        var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+
+        if (!Directory.Exists(uploadsPath))
+            Directory.CreateDirectory(uploadsPath);
+
+        var filePath = Path.Combine(uploadsPath, fileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
         {
-            var existingPackage = _context.Package.SingleOrDefault(p => p.Id == package.Id);
-            if (existingPackage == null) return NotFound();
-
-            existingPackage.Name = package.Name;
-            existingPackage.Description = package.Description;
-            existingPackage.Price = package.Price;
-            existingPackage.Details = package.Details;
-            existingPackage.CityId = package.CityId;
-
-            if (Photo != null && Photo.Length > 0)
-            {
-                existingPackage.ImagePath = _cloudinaryService.UploadImage(Photo);
-            }
-            // إذا لم يتم رفع صورة جديدة، احتفظ بالصورة الحالية
-
-            _context.SaveChanges();
-            return RedirectToAction("Package");
+            Photo.CopyTo(stream);
         }
+
+        existingPackage.ImagePath = "/uploads/" + fileName;
+    }
+
+    _context.SaveChanges();
+    return RedirectToAction("Package");
+}
+
 
         // ================= Cities =================
         public IActionResult City()
