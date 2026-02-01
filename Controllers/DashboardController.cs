@@ -112,8 +112,7 @@ public IActionResult CreateNewPackage(Package package, IFormFile Photo)
 
         [HttpPost]
         [IgnoreAntiforgeryToken]
-        [HttpPost]
-[IgnoreAntiforgeryToken]
+      
 public IActionResult UpdatePackage(Package package, IFormFile Photo)
 {
     var existingPackage = _context.Package.FirstOrDefault(p => p.Id == package.Id);
